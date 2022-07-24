@@ -35,8 +35,12 @@ def get_config():
 
 def get_ipaddr():
     # Get current IP address
-    r = requests.get('https://api.ipify.org')
-    return r.text
+    try:
+        r = requests.get('https://api.ipify.org')
+        return r.text
+    except:
+        print('Error: Could not get IP address')
+        return None
     # content = requests.get('http://192.168.1.1/network-expert-internet.lp?ip=&phoneType=undefined').content.decode('utf-8')
     # content = content.replace(' ', '')
     # content = content.replace('\n', '')
@@ -55,10 +59,11 @@ if __name__ == '__main__':
     current_ip = ''
     while True:
         new_ip = get_ipaddr()
-        if new_ip != current_ip:
-            print('New IP: ' + new_ip)
-            update_dns(cfg, new_ip)
-            current_ip = new_ip
-        else:
-            print('IP unchanged')
+        if new_ip != None:
+            if new_ip != current_ip:
+                print('New IP: ' + new_ip)
+                update_dns(cfg, new_ip)
+                current_ip = new_ip
+            else:
+                print('IP unchanged')
         time.sleep(int(cfg['update_interval']))
