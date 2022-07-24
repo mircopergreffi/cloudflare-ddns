@@ -1,5 +1,36 @@
 
-import time, yaml, requests, re, CloudFlare
+import os, time, yaml, requests, re, CloudFlare
+
+def get_config():
+    # Read config file
+
+    if (os.path.isfile('config.yml')):
+        with open('config.yaml', 'r') as ymlfile:
+            try:
+                cfg = yaml.safe_load(ymlfile)
+            except:
+                print('Error: Could not load config file')
+                exit(1)
+    else:
+        cfg = {
+            'cloudflare':
+            {
+                'email': os.environ('CLOUDFLARE_EMAIL'),
+                'token': os.environ('CLOUDFLARE_TOKEN'),
+            },
+            'update_ip': [
+                {
+                    'zone_id': os.environ('ZONE_ID_1'),
+                    'id': os.environ('DNS_RECORD_ID_1'),
+                },
+                {
+                    'zone_id': os.environ('ZONE_ID_2'),
+                    'id': os.environ('DNS_RECORD_ID_2'),
+                }
+            ]
+        }
+        
+    return cfg
 
 def get_ipaddr():
     content = requests.get('http://192.168.1.1/network-expert-internet.lp?ip=&phoneType=undefined').content.decode('utf-8')
@@ -16,15 +47,7 @@ def update_dns(cfg, ipaddr):
         cf.zones.dns_records.put(entry['zone_id'], entry['id'], data=data)
 
 if __name__ == '__main__':
-
-    # Read config file
-    with open('config.yaml', 'r') as ymlfile:
-        try:
-            cfg = yaml.safe_load(ymlfile)
-        except:
-            print('Error: Could not load config file')
-            exit(1)
-
+    cfg = get_config()
     current_ip = ''
     while True:
         new_ip = get_ipaddr()
