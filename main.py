@@ -58,4 +58,4 @@ if __name__ == '__main__':
             current_ip = new_ip
         else:
             print('IP unchanged')
-        time.sleep(cfg['update_interval'])
+        time.sleep(int(cfg['update_interval']))
