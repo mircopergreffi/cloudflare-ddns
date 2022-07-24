@@ -18,6 +18,7 @@ def get_config():
                 'email': os.getenv('CLOUDFLARE_EMAIL'),
                 'token': os.getenv('CLOUDFLARE_TOKEN'),
             },
+            'update_interval': os.getenv('UPDATE_INTERVAL', '300'),
             'update_ip': [
                 {
                     'zone_id': os.getenv('ZONE_ID_1'),
