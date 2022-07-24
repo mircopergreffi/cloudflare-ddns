@@ -6,6 +6,8 @@ cloudflare:
   email: 
   token: # visit https://dash.cloudflare.com/profile/api-tokens
 
+update_interval: 100 # seconds
+
 # DNS Record to update
 # The record is identified by:
 #   id: ID of the DNS Record;
