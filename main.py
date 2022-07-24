@@ -55,6 +55,7 @@ def update_dns(cfg, ipaddr):
         cf.zones.dns_records.put(entry['zone_id'], entry['id'], data=data)
 
 if __name__ == '__main__':
+    print('Starting...')
     cfg = get_config()
     current_ip = ''
     while True:
