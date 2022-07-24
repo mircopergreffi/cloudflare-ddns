@@ -15,17 +15,17 @@ def get_config():
         cfg = {
             'cloudflare':
             {
-                'email': os.environ('CLOUDFLARE_EMAIL'),
-                'token': os.environ('CLOUDFLARE_TOKEN'),
+                'email': os.getenv('CLOUDFLARE_EMAIL'),
+                'token': os.getenv('CLOUDFLARE_TOKEN'),
             },
             'update_ip': [
                 {
-                    'zone_id': os.environ('ZONE_ID_1'),
-                    'id': os.environ('DNS_RECORD_ID_1'),
+                    'zone_id': os.getenv('ZONE_ID_1'),
+                    'id': os.getenv('DNS_RECORD_ID_1'),
                 },
                 {
-                    'zone_id': os.environ('ZONE_ID_2'),
-                    'id': os.environ('DNS_RECORD_ID_2'),
+                    'zone_id': os.getenv('ZONE_ID_2'),
+                    'id': os.getenv('DNS_RECORD_ID_2'),
                 }
             ]
         }
