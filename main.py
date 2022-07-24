@@ -29,6 +29,9 @@ if __name__ == '__main__':
     while True:
         new_ip = get_ipaddr()
         if new_ip != current_ip:
+            print('New IP: ' + new_ip)
             update_dns(cfg, new_ip)
-            current_ip = new_ip'
+            current_ip = new_ip
+        else:
+            print('IP unchanged')
         time.sleep(cfg['update_interval'])
