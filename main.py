@@ -34,11 +34,14 @@ def get_config():
     return cfg
 
 def get_ipaddr():
-    content = requests.get('http://192.168.1.1/network-expert-internet.lp?ip=&phoneType=undefined').content.decode('utf-8')
-    content = content.replace(' ', '')
-    content = content.replace('\n', '')
-    content = content.replace('\r', '')
-    return re.search('<dt>IndirizzoIPv4</dt><dd>([0-9.]+)</dd>', content).group(1)
+    # Get current IP address
+    r = requests.get('https://api.ipify.org')
+    return r.text
+    # content = requests.get('http://192.168.1.1/network-expert-internet.lp?ip=&phoneType=undefined').content.decode('utf-8')
+    # content = content.replace(' ', '')
+    # content = content.replace('\n', '')
+    # content = content.replace('\r', '')
+    # return re.search('<dt>IndirizzoIPv4</dt><dd>([0-9.]+)</dd>', content).group(1)
 
 def update_dns(cfg, ipaddr):
     cf = CloudFlare.CloudFlare(email=cfg['cloudflare']['email'], token=cfg['cloudflare']['token'])
