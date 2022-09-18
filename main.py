@@ -54,17 +54,28 @@ def update_dns(cfg, ipaddr):
         data = {'type':dnsrecord['type'], 'name':dnsrecord['name'], 'content':ipaddr, 'ttl':dnsrecord['ttl'], 'proxied':dnsrecord['proxied']}
         cf.zones.dns_records.put(entry['zone_id'], entry['id'], data=data)
 
+def update_ip(cfg):
+    try:
+        new_ip = get_ipaddr()
+        if new_ip != current_ip:
+            print('New IP: ' + new_ip)
+            update_dns(cfg, new_ip)
+            current_ip = new_ip
+        else:
+            print('IP unchanged')
+        return True
+    except:
+        print('Error: Could not get IP address')
+    return False
+
+error = False
+
 if __name__ == '__main__':
     print('Starting...')
     cfg = get_config()
     current_ip = ''
     while True:
-        new_ip = get_ipaddr()
-        if new_ip != None:
-            if new_ip != current_ip:
-                print('New IP: ' + new_ip)
-                update_dns(cfg, new_ip)
-                current_ip = new_ip
-            else:
-                print('IP unchanged')
-        time.sleep(int(cfg['update_interval']))
+        if update_ip(cfg):
+            time.sleep(int(cfg['update_interval']))
+        else:
+            time.sleep(int(cfg['update_interval_error']))

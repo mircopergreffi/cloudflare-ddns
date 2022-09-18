@@ -7,6 +7,7 @@ cloudflare:
   token: # visit https://dash.cloudflare.com/profile/api-tokens
 
 update_interval: 100 # seconds
+update_interval_error: 5 # seconds
 
 # DNS Record to update
 # The record is identified by:
