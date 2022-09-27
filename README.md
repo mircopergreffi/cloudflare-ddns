@@ -6,8 +6,7 @@ Uses Cloudflare python library.
 Configuration in YAML.
 
 ## Prerequisites
-This documentation assumes you already have a Cloudflare account set up.
-
+This documentation assumes you already have a Cloudflare account set up.  
 You have generated an API token (see https://dash.cloudflare.com/profile/api-tokens).  
 You know the Record ID and Zone ID of the records you want to update (see https://api.cloudflare.com) 
 
@@ -44,7 +43,7 @@ This is usually the preferred choice.
 As of now it is limited to just one record using environment variables, but you can update the `config.yaml` file after creating and running the container to update more than one record.
 
 ### Prebuilt image
-You can use the built image with the command:  
+You can use the prebuilt image with the command:  
 ```
 docker run -d \
   -e CLOUDFLARE_EMAIL="replace-with-your-email" \
