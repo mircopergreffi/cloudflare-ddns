@@ -6,8 +6,8 @@ Uses Cloudflare python library.
 
 ## Install by Cloning
 Clone the repository  
-    $ git clone https://github.com/mircopergreffi/cloudflare-ddns-updater  
-    $ cd cloudflare-ddns-updater  
+    `$ git clone https://github.com/mircopergreffi/cloudflare-ddns-updater`  
+    `$ cd cloudflare-ddns-updater`  
 
 ## Install with Docker  
 Otherwise you can use Docker.  
