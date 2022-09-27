@@ -13,9 +13,9 @@ $ cd cloudflare-ddns-updater`
 Otherwise you can use Docker.  
 
 Run the container with the command:  
-`docker run -d \  
-  -e CLOUDFLARE_EMAIL="example@example.com" \  
-  -e CLOUDFLARE_TOKEN="" \  
-  -e CLOUDFLARE_RECORD_ID="" \  
-  -e CLOUDFLARE_ZONE_ID="" \  
-  mircopergreffi/cloudflare_ddns_updater:latest`
+    `docker run -d \  
+      -e CLOUDFLARE_EMAIL="example@example.com" \  
+      -e CLOUDFLARE_TOKEN="" \  
+      -e CLOUDFLARE_RECORD_ID="" \  
+      -e CLOUDFLARE_ZONE_ID="" \  
+      mircopergreffi/cloudflare_ddns_updater:latest`
