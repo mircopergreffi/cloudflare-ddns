@@ -10,7 +10,7 @@ This documentation assumes you already have a Cloudflare account set up.
 You have generated an API token (see https://dash.cloudflare.com/profile/api-tokens).  
 You know the Record ID and Zone ID of the records you want to update (see https://api.cloudflare.com) 
 
-## Install by Cloning
+## Install
 
 It requires Python3 and pip for dependencies.
 
@@ -39,19 +39,21 @@ $ python main.py
 
 ## Install with Docker
 Otherwise you can use Docker.  
-This is usually the preferred choice.  
-As of now it is limited to just one record using environment variables, but you can update the `config.yaml` file after creating and running the container to update more than one record.
 
 ### Prebuilt image
 You can use the prebuilt image with the command:  
 ```
 docker run -d \
+  -v data:/var/lib/data \
+  mircopergreffi/cloudflare_ddns_updater:latest
+```
+<!--
   -e CLOUDFLARE_EMAIL="replace-with-your-email" \
   -e CLOUDFLARE_TOKEN="replace-with-your-token" \
   -e CLOUDFLARE_RECORD_ID="replace-with-your-record-id" \
-  -e CLOUDFLARE_ZONE_ID="replace-with-your-zone-id" \
-  mircopergreffi/cloudflare_ddns_updater:latest
-```
+  -e CLOUDFLARE_ZONE_ID="replace-with-your-zone-id" \ -->
+
+After running the container for the first time, edit the file `config.yaml` located in the volume, then restart the container.
 
 ### Dockerfile
 Otherwise, if you prefer, you can build the image yourself using the Dockerfile.

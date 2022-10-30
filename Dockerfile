@@ -3,5 +3,7 @@ FROM python:alpine
 RUN apk add git
 RUN git clone https://github.com/mircopergreffi/cloudflare-ddns-updater
 RUN python -m pip install -r /cloudflare-ddns-updater/requirements.txt
+RUN mkdir -p /var/lib/data
+RUN cp -n /cloudflare-ddns-updater/example-config.yaml /var/lib/data/config.yaml
 
 CMD python /cloudflare-ddns-updater/main.py
