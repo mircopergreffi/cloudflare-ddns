@@ -4,32 +4,39 @@ import os, time, yaml, requests, re, CloudFlare
 def get_config():
     # Read config file
 
-    if (os.path.isfile('config.yml')):
-        with open('config.yaml', 'r') as ymlfile:
-            try:
-                cfg = yaml.safe_load(ymlfile)
-            except:
-                print('Error: Could not load config file')
-                exit(1)
-    else:
-        cfg = {
-            'cloudflare':
-            {
-                'email': os.getenv('CLOUDFLARE_EMAIL'),
-                'token': os.getenv('CLOUDFLARE_TOKEN'),
-            },
-            'update_interval': os.getenv('UPDATE_INTERVAL', '300'),
-            'update_ip': [
-                {
-                    'zone_id': os.getenv('ZONE_ID_1'),
-                    'id': os.getenv('DNS_RECORD_ID_1'),
-                },
-                {
-                    'zone_id': os.getenv('ZONE_ID_2'),
-                    'id': os.getenv('DNS_RECORD_ID_2'),
-                }
-            ]
-        }
+    path = 'config.yaml'
+    if (not os.path.isfile(path)):
+        path = os.path.join(os.getenv("DATA_LOCATION", "/var/lib/data"), path)
+        if (not os.path.isfile(path)):
+            print('Error: Could not find config.yaml file')
+            exit(1) 
+
+    with open(path, 'r') as ymlfile:
+        try:
+            cfg = yaml.safe_load(ymlfile)
+        except:
+            print('Error: Could not load config.yaml file')
+            exit(1)
+    
+    # else:
+    #     cfg = {
+    #         'cloudflare':
+    #         {
+    #             'email': os.getenv('CLOUDFLARE_EMAIL'),
+    #             'token': os.getenv('CLOUDFLARE_TOKEN'),
+    #         },
+    #         'update_interval': os.getenv('UPDATE_INTERVAL', '300'),
+    #         'update_ip': [
+    #             {
+    #                 'zone_id': os.getenv('ZONE_ID_1'),
+    #                 'id': os.getenv('DNS_RECORD_ID_1'),
+    #             },
+    #             {
+    #                 'zone_id': os.getenv('ZONE_ID_2'),
+    #                 'id': os.getenv('DNS_RECORD_ID_2'),
+    #             }
+    #         ]
+    #     }
         
     return cfg
 
