@@ -17,26 +17,6 @@ def get_config():
         except:
             print('Error: Could not load config.yaml file')
             exit(1)
-    
-    # else:
-    #     cfg = {
-    #         'cloudflare':
-    #         {
-    #             'email': os.getenv('CLOUDFLARE_EMAIL'),
-    #             'token': os.getenv('CLOUDFLARE_TOKEN'),
-    #         },
-    #         'update_interval': os.getenv('UPDATE_INTERVAL', '300'),
-    #         'update_ip': [
-    #             {
-    #                 'zone_id': os.getenv('ZONE_ID_1'),
-    #                 'id': os.getenv('DNS_RECORD_ID_1'),
-    #             },
-    #             {
-    #                 'zone_id': os.getenv('ZONE_ID_2'),
-    #                 'id': os.getenv('DNS_RECORD_ID_2'),
-    #             }
-    #         ]
-    #     }
         
     return cfg
 
@@ -47,12 +27,7 @@ def get_ipaddr():
         return r.text
     except:
         print('Error: Could not get IP address')
-        return None
-    # content = requests.get('http://192.168.1.1/network-expert-internet.lp?ip=&phoneType=undefined').content.decode('utf-8')
-    # content = content.replace(' ', '')
-    # content = content.replace('\n', '')
-    # content = content.replace('\r', '')
-    # return re.search('<dt>IndirizzoIPv4</dt><dd>([0-9.]+)</dd>', content).group(1)
+    return None
 
 def update_dns(cfg, ipaddr):
     cf = CloudFlare.CloudFlare(email=cfg['cloudflare']['email'], token=cfg['cloudflare']['token'])
@@ -72,7 +47,7 @@ def update_ip(cfg):
             print('IP unchanged')
         return True
     except:
-        print('Error: Could not get IP address')
+        print('Error: Could not update IP address')
     return False
 
 error = False
@@ -80,6 +55,7 @@ error = False
 if __name__ == '__main__':
     print('Starting...')
     cfg = get_config()
+    print(cfg)
     current_ip = ''
     while True:
         if update_ip(cfg):
