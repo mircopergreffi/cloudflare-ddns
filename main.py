@@ -39,10 +39,10 @@ def update_dns(cfg, ipaddr):
 def update_ip(cfg):
 	try:
 		new_ip = get_ipaddr()
-		if new_ip != current_ip:
+		if new_ip != cfg['current_ip']:
 			print('New IP: ' + new_ip)
 			update_dns(cfg, new_ip)
-			current_ip = new_ip
+			cfg['current_ip'] = new_ip
 		else:
 			print('IP unchanged')
 		return True
@@ -55,8 +55,7 @@ error = False
 if __name__ == '__main__':
 	print('Starting...')
 	cfg = get_config()
-	print(cfg)
-	current_ip = ''
+	cfg['current_ip'] = ''
 	while True:
 		if update_ip(cfg):
 			time.sleep(int(cfg['update_interval']))
