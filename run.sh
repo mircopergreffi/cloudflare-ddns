@@ -33,7 +33,7 @@ while :; do
       record_id=${record_id//\"/}
       record_name=${record_name//\"/}
       i=$((i+1))
-      if [[ "$record_type" == "CNAME" ]]; then
+      if [[ "$record_type" == "CNAME" ]] && [[ "$SKIP_CNAME" == 1 ]]; then
         continue
       fi
       echo "Deleting record: id=$record_id; name=$record_name"
