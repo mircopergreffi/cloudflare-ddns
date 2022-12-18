@@ -16,6 +16,8 @@ You know the Zone ID of the records you want to update (see https://api.cloudfla
 
 ## Docker
 
+### Build the image yourself
+
 Pull the repository:
 ```
 $ git clone -b alpine-sh https://github.com/mircopergreffi/cloudflare-ddns-updater
