@@ -1,59 +1,53 @@
 # Cloudflare DNS Updater
 
+Simple bash script for updating Cloudflare DNS records.
 Checks for IP changes and updates your Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
-Uses Cloudflare python library.  
-Configuration in YAML.
 
 ## Prerequisites
 This documentation assumes you already have a Cloudflare account set up.  
 You have generated an API token (see https://dash.cloudflare.com/profile/api-tokens).  
-You know the Record ID and Zone ID of the records you want to update (see https://api.cloudflare.com) 
+You know the Zone ID of the records you want to update (see https://api.cloudflare.com) 
 
-## Install
+## Docker
 
-It requires Python3 and pip for dependencies.
-
-Check python version:
+Pull the repository:
 ```
-$ python --version
-Python 3.10.5
-```
-
-Clone the repository
-```
-$ git clone https://github.com/mircopergreffi/cloudflare-ddns-updater
+$ git clone -b alpine-sh https://github.com/mircopergreffi/cloudflare-ddns-updater
 $ cd cloudflare-ddns-updater
 ```
-Copy the configuration template (`example-config.yaml`) as `config.yaml` and fill it:
+
+Create `.env` file from `example.env` and edit it:
 ```
-$ cp example-config.yaml config.yaml
-$ nano config.yaml
+$ cp example.env .env
+$ vi .env
 ```
 
-Install dependencies and run:
+Build the image:
 ```
-$ python -m pip install -r requirements.txt
-$ python main.py
+$ docker build -t cloudflare_ddns_updater .
 ```
 
-## Install with Docker
-Otherwise you can use Docker.  
-
-### Prebuilt image
-You can use the prebuilt image with the command:  
+Run the image:
 ```
-docker run -d \
-  -v data:/var/lib/data \
-  mircopergreffi/cloudflare_ddns_updater:latest
+$ docker run -d --env-file .env cloudflare_ddns_updater
 ```
-<!--
-  -e CLOUDFLARE_EMAIL="replace-with-your-email" \
-  -e CLOUDFLARE_TOKEN="replace-with-your-token" \
-  -e CLOUDFLARE_RECORD_ID="replace-with-your-record-id" \
-  -e CLOUDFLARE_ZONE_ID="replace-with-your-zone-id" \ -->
 
-After running the container for the first time, edit the file `config.yaml` located in the volume, then restart the container.
+## Prebuilt image
 
-### Dockerfile
-Otherwise, if you prefer, you can build the image yourself using the Dockerfile.
+Create a `.env` from the template:
+```
+TOKEN=your_token
+ZONEID=your_zone_id
+UPDATE_INTERVAL=update_interval_in_seconds__negative_do_not_repeat
+DOMAIN=your_domain_name
+BIND_TEMPLATE=%domain%. 1 IN A %ip%;*.%domain%. 1 IN CNAME %domain%
+BIND_TEMPLATE_NOPROXY=
+```
+
+Pull and run the image:
+```
+$ docker run -d --env-file .env \
+    mircopergreffi/cloudflare_ddns_updater:latest
+
+```

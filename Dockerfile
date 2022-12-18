@@ -1,8 +1,4 @@
-FROM python:alpine
-
-RUN apk add git
-RUN git clone https://github.com/mircopergreffi/cloudflare-ddns-updater
-RUN python -m pip install -r /cloudflare-ddns-updater/requirements.txt
-RUN mkdir -p /var/lib/data
-
-CMD python /cloudflare-ddns-updater/main.py
+FROM alpine
+RUN apk add curl jq
+COPY run.sh /app/run.sh
+CMD /app/run.sh
