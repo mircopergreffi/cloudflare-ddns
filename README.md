@@ -25,12 +25,12 @@ $ vi .env
 
 Build the image:
 ```
-$ docker build -t cloudflare_ddns_updater .
+$ docker build -t cloudflare_ddns_updater:alpine-sh .
 ```
 
 Run the image:
 ```
-$ docker run -d --env-file .env cloudflare_ddns_updater
+$ docker run -d --env-file .env cloudflare_ddns_updater:alpine-sh
 ```
 
 ## Prebuilt image
@@ -48,6 +48,6 @@ BIND_TEMPLATE_NOPROXY=
 Pull and run the image:
 ```
 $ docker run -d --env-file .env \
-    mircopergreffi/cloudflare_ddns_updater:latest
+    mircopergreffi/cloudflare_ddns_updater:alpine-sh
 
 ```
