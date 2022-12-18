@@ -71,12 +71,12 @@ $ vi .env
 
 Build the image:
 ```
-$ docker build -t cloudflare-ddns:alpine-sh .
+$ docker build -t cloudflare-ddns .
 ```
 
 Run the image:
 ```
-$ docker run -d --env-file .env cloudflare-ddns:alpine-sh
+$ docker run -d --env-file .env cloudflare-ddns
 ```
 
 ### Prebuilt image
@@ -85,6 +85,6 @@ Create a `.env` file from the template (`example.env`).
 Pull and run the image:
 ```
 $ docker run -d --env-file .env \
-    mircopergreffi/cloudflare-ddns:alpine-sh
+    mircopergreffi/cloudflare-ddns
 
 ```
