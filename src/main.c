@@ -28,12 +28,11 @@ int main(int argc, char** argv)
 
 	// printf("%s",getenv("IP"));
 
-	// printf("ZONEID = %s\n",getenv("ZONEID"));
-	// printf("UPDATE_INTERVAL = %s\n",getenv("UPDATE_INTERVAL"));
-	// printf("DOMAIN = %s\n",getenv("DOMAIN"));
-	// printf("BIND_TEMPLATE = %s\n",getenv("BIND_TEMPLATE"));
-	// printf("BIND_TEMPLATE_NOPROXY = %s\n",getenv("BIND_TEMPLATE_NOPROXY"));
-
+	printf("ZONEID = %s\n",getenv("ZONEID"));
+	printf("UPDATE_INTERVAL = %s\n",getenv("UPDATE_INTERVAL"));
+	printf("DOMAIN = %s\n",getenv("DOMAIN"));
+	printf("BIND_TEMPLATE = %s\n",getenv("BIND_TEMPLATE"));
+	printf("BIND_TEMPLATE_NOPROXY = %s\n",getenv("BIND_TEMPLATE_NOPROXY"));
 
 	// Initialize libcurl
 	CURL *curl;
@@ -46,6 +45,9 @@ int main(int argc, char** argv)
 	{
 		// Print libcurl version
 		printf("libcurl version %s\n", curl_version());
+
+		// Main code
+
 		// Curl cleanup
 		curl_easy_cleanup(curl);
 	}
