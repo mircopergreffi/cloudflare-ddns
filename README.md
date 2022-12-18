@@ -4,6 +4,8 @@ Simple bash script for updating Cloudflare DNS records.
 Checks for IP changes and updates your Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
 
+## How It Works
+
 ## Prerequisites
 This documentation assumes you already have a Cloudflare account set up.  
 You have generated an API token (see https://dash.cloudflare.com/profile/api-tokens).  
