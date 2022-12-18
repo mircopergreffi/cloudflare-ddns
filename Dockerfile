@@ -1,8 +1,10 @@
 FROM alpine AS build
-RUN apk add libcurl
-COPY src /root/src
+WORKDIR /root/build
+RUN apk add --no-cache git libcurl
+RUN git clone https://github.com/cesanta/mjson
+COPY src ./src
 CMD sh
 
 # FROM busybox:1.35.0-musl
-# COPY --from=build /root/cfddns /bin/cfddns
+# COPY --from=build /root/build/cfddns /bin/cfddns
 # ENTRYPOINT ["/bin/cfddns"]
