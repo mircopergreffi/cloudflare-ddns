@@ -6,7 +6,7 @@ while :; do
   if [[ "$current_ip" == "$new_ip" ]]; then
     echo "IP unchanged."
   else
-    echo "New IP: $new_ip" $'\n'
+    echo "New IP: $new_ip"
     current_ip=$new_ip
     
     # Get DNS records
@@ -22,7 +22,7 @@ while :; do
     fi
     
     len=$(echo $dns_records | jq ".result | length")
-    echo "Found $len DNS records." $'\n'
+    echo "Found $len DNS records."
 
     i=0
     while [[ "$i" -lt $len ]]; do
@@ -41,7 +41,6 @@ while :; do
         -X DELETE "https://api.cloudflare.com/client/v4/zones/${ZONEID}/dns_records/${record_id}" \
         -H "Authorization: Bearer ${TOKEN}" \
         -H "Content-Type:application/json"
-      echo $'\n'
     done
 
     # Proxied DNS records
@@ -57,7 +56,6 @@ while :; do
         -H "Authorization: Bearer ${TOKEN}" \
         --form 'file=@bind_data.txt' \
         --form 'proxied=true'
-      echo $'\n'
     fi
 
     # Non Proxied DNS records
@@ -73,10 +71,8 @@ while :; do
         -H "Authorization: Bearer ${TOKEN}" \
         --form 'file=@bind_data_noproxy.txt' \
         --form 'proxied=false'
-      echo $'\n'
     fi
 
-    echo $'\n'
   fi
 
   
