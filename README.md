@@ -1,59 +1,90 @@
-# Cloudflare DNS Updater
+# Cloudflare DDNS
+
+Simple bash script for updating Cloudflare DNS records.  
+It allows you to use Cloudflare as a Dynamic DNS.  
+  
+The uncompressed image size is almost 10MB.  
+
+## How It Works
 
 Checks for IP changes and updates your Cloudflare DNS records.  
-It allows you to use Cloudflare as a Dynamic DNS.  
-Uses Cloudflare python library.  
-Configuration in YAML.
+CNAME records are not deleted.  
+...
 
 ## Prerequisites
-This documentation assumes you already have a Cloudflare account set up.  
-You have generated an API token (see https://dash.cloudflare.com/profile/api-tokens).  
-You know the Record ID and Zone ID of the records you want to update (see https://api.cloudflare.com) 
+This documentation assumes you already have a Cloudflare account set up with a domain registered.  
 
-## Install
+### Generate an API Token
 
-It requires Python3 and pip for dependencies.
+Visit https://dash.cloudflare.com/profile/api-tokens.  
+Click the "Create Token" button.  
+Use the template "Edit zone DNS".  
+In the "Zone Resources" section choose: "Include", "Specific Zone" and the zone.  
+Scroll to the bottom and click the "Continue to summary" button.  
+Click the "Create Token" button.  
+Copy your newly generate token.  
 
-Check python version:
+### List your ZoneIDs
+
+Open a terminal and type:  
 ```
-$ python --version
-Python 3.10.5
+curl -X GET "https://api.cloudflare.com/client/v4/zones" \
+     -H "Authorization: Bearer YOUR_TOKEN" \
+     -H "Content-Type: application/json"
+```
+Replace YOUR_TOKEN with the previously generated token.  
+
+## Environment Variables
+
+| Variable              | Description | Example |
+|-----------------------|-------------|---------|
+| TOKEN                 | Cloudflare API Token | |
+| ZONEID                | Cloudflare Zone ID | |
+| UPDATE_INTERVAL       | Time to wait between IP checks in seconds. | 30 |
+| DOMAIN                | Your domain name | example.com |
+| BIND_TEMPLATE         |  | %domain%. 1 IN A %ip% |
+| BIND_TEMPLATE_NOPROXY |  | %domain% 1 IN TXT "v=spf1 ip4:%ip% -all" |
+
+`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY` are used to generate `Zone files` (see: https://en.wikipedia.org/wiki/Zone_file).  
+The DNS records generated from `BIND_TEMPLATE` are proxied from Cloudflare.  
+The DNS records generated from `BIND_TEMPLATE_NOPROXY` are **NOT** proxied from Cloudflare.  
+Template variables:  
+ - `%domain%` is replaced with the content of the environment variable `DOMAIN`.  
+ - `%ip%` is replaced with your public IP.  
+ - `;` is replaced with a new line.  
+
+## Docker
+
+### Build the image yourself
+
+Pull the repository:
+```
+$ git clone -b alpine-sh https://github.com/mircopergreffi/cloudflare-ddns
+$ cd cloudflare-ddns
 ```
 
-Clone the repository
+Create `.env` file from `example.env` and edit it:
 ```
-$ git clone https://github.com/mircopergreffi/cloudflare-ddns-updater
-$ cd cloudflare-ddns-updater
-```
-Copy the configuration template (`example-config.yaml`) as `config.yaml` and fill it:
-```
-$ cp example-config.yaml config.yaml
-$ nano config.yaml
+$ cp example.env .env
+$ vi .env
 ```
 
-Install dependencies and run:
+Build the image:
 ```
-$ python -m pip install -r requirements.txt
-$ python main.py
+$ docker build -t cloudflare-ddns .
 ```
 
-## Install with Docker
-Otherwise you can use Docker.  
+Run the image:
+```
+$ docker run -d --env-file .env cloudflare-ddns
+```
 
 ### Prebuilt image
-You can use the prebuilt image with the command:  
-```
-docker run -d \
-  -v data:/var/lib/data \
-  mircopergreffi/cloudflare_ddns_updater:latest
-```
-<!--
-  -e CLOUDFLARE_EMAIL="replace-with-your-email" \
-  -e CLOUDFLARE_TOKEN="replace-with-your-token" \
-  -e CLOUDFLARE_RECORD_ID="replace-with-your-record-id" \
-  -e CLOUDFLARE_ZONE_ID="replace-with-your-zone-id" \ -->
 
-After running the container for the first time, edit the file `config.yaml` located in the volume, then restart the container.
+Create a `.env` file from the template (`example.env`).  
+Pull and run the image:
+```
+$ docker run -d --env-file .env \
+    mircopergreffi/cloudflare-ddns
 
-### Dockerfile
-Otherwise, if you prefer, you can build the image yourself using the Dockerfile.
+```
