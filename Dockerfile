@@ -1,6 +1,6 @@
 FROM alpine AS build
 WORKDIR /root/build
-RUN apk add --no-cache git libcurl
+RUN apk add --no-cache build-base git libcurl
 RUN git clone https://github.com/cesanta/mjson
 COPY src ./src
 CMD sh
