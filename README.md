@@ -14,7 +14,18 @@ CNAME records are not deleted.
 ## Prerequisites
 This documentation assumes you already have a Cloudflare account set up.  
 You have generated an API token (see https://dash.cloudflare.com/profile/api-tokens).  
-You know the Zone ID of the records you want to update (see https://api.cloudflare.com) 
+You know the Zone ID of the records you want to update (see https://api.cloudflare.com).  
+
+## Environment Variables
+
+| Variable              | Description | Example |
+|-----------------------|-------------|---------|
+| TOKEN                 | Cloudflare API Token | |
+| ZONEID                | Cloudflare Zone ID | |
+| UPDATE_INTERVAL       | Time to wait between IP checks in seconds. | 30 |
+| DOMAIN                | Your domain name | example.com |
+| BIND_TEMPLATE         |  | %domain%. 1 IN A %ip% |
+| BIND_TEMPLATE_NOPROXY |  | example.com 1 IN TXT "v=spf1 ip4:%ip% -all" |
 
 ## Docker
 
