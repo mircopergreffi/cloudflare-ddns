@@ -1,10 +1,13 @@
 # Cloudflare DNS Updater
 
-Simple bash script for updating Cloudflare DNS records.
+Simple bash script for updating Cloudflare DNS records.  
 Checks for IP changes and updates your Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
 
 ## How It Works
+
+CNAME records are not deleted.  
+...
 
 ## Prerequisites
 This documentation assumes you already have a Cloudflare account set up.  
