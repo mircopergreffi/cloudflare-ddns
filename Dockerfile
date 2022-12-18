@@ -1,4 +1,4 @@
 FROM alpine
-RUN apk add curl jq
+RUN apk add --no-cache curl jq
 COPY run.sh /app/run.sh
-CMD /app/run.sh
+ENTRYPOINT /app/run.sh

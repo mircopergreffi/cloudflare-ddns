@@ -3,7 +3,7 @@
 Simple bash script for updating Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
   
-The uncompressed image size is less than 13MB.  
+The uncompressed image size is almost 10MB.  
 
 ## How It Works
 
