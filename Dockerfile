@@ -1,4 +1,6 @@
-FROM alpine
-RUN apk add --no-cache curl jq
-COPY run.sh /app/run.sh
-ENTRYPOINT ["sh","/app/run.sh"]
+FROM alpine AS build
+
+
+FROM busybox:1.35.0-uclibc
+COPY --from=build cfddns /bin/cfddns
+ENTRYPOINT ["/bin/cfddns"]
