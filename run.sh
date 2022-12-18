@@ -1,12 +1,11 @@
-
-# Exit on error
-set -e
-
-current_ip=
-
+#!/bin/sh
+current_ip=0.0.0.0
 while :; do
   new_ip=$(curl -s https://cloudflare.com/cdn-cgi/trace | grep ip | sed "s/ip=//g")
-  if [[ "$current_ip" != "$new_ip" ]]; then
+  
+  if [[ "$current_ip" == "$new_ip" ]]; then
+    echo "IP unchanged."
+  else
     echo "New IP: $new_ip" $'\n'
     current_ip=$new_ip
     
@@ -46,7 +45,7 @@ while :; do
     done
 
     # Proxied DNS records
-  if [ -n "${BIND_TEMPLATE}" ]; then
+    if [ -n "${BIND_TEMPLATE}" ]; then
       bind_data=$BIND_TEMPLATE
       bind_data=${bind_data//\%ip\%/${current_ip}}
       bind_data=${bind_data//\%domain\%/${DOMAIN}}
@@ -80,6 +79,7 @@ while :; do
     echo $'\n'
   fi
 
+  
   if [[ $UPDATE_INTERVAL -ge 0 ]]; then
     sleep $UPDATE_INTERVAL
   else
