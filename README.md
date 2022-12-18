@@ -7,9 +7,10 @@ The uncompressed image size is almost 10MB.
 
 ## How It Works
 
-Checks for IP changes and updates your Cloudflare DNS records.  
-CNAME records are not deleted.  
-...
+Waits for your public IP to change, it checks for changes with a set time interval (`UPDATE_INTERVAL`).  
+Then deletes all DNS records (except for CNAME records).  
+Generate new DNS records from the specified template (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`).  
+Set `UPDATE_INTERVAL` to a negative number (i.e.: `-1`) for updating the DNS records once and exiting.  
 
 ## Prerequisites
 This documentation assumes you already have a Cloudflare account set up with a domain registered.  
@@ -40,7 +41,7 @@ Replace YOUR_TOKEN with the previously generated token.
 |-----------------------|-------------|---------|
 | TOKEN                 | Cloudflare API Token | |
 | ZONEID                | Cloudflare Zone ID | |
-| UPDATE_INTERVAL       | Time to wait between IP checks in seconds. | 30 |
+| UPDATE_INTERVAL       | Time to wait between IP checks in seconds. `-1` for updating DNS records once. | 30 |
 | DOMAIN                | Your domain name | example.com |
 | BIND_TEMPLATE         |  | %domain%. 1 IN A %ip% |
 | BIND_TEMPLATE_NOPROXY |  | %domain% 1 IN TXT "v=spf1 ip4:%ip% -all" |
