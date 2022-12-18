@@ -38,7 +38,7 @@ Run the image:
 $ docker run -d --env-file .env cloudflare_ddns_updater:alpine-sh
 ```
 
-## Prebuilt image
+### Prebuilt image
 
 Create a `.env` from the template:
 ```
