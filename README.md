@@ -1,4 +1,4 @@
-# Cloudflare DNS Updater
+# Cloudflare DDNS
 
 Simple bash script for updating Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
@@ -22,8 +22,8 @@ You know the Zone ID of the records you want to update (see https://api.cloudfla
 
 Pull the repository:
 ```
-$ git clone -b alpine-sh https://github.com/mircopergreffi/cloudflare-ddns-updater
-$ cd cloudflare-ddns-updater
+$ git clone -b alpine-sh https://github.com/mircopergreffi/cloudflare-ddns
+$ cd cloudflare-ddns
 ```
 
 Create `.env` file from `example.env` and edit it:
@@ -34,12 +34,12 @@ $ vi .env
 
 Build the image:
 ```
-$ docker build -t cloudflare_ddns_updater:alpine-sh .
+$ docker build -t cloudflare_ddns:alpine-sh .
 ```
 
 Run the image:
 ```
-$ docker run -d --env-file .env cloudflare_ddns_updater:alpine-sh
+$ docker run -d --env-file .env cloudflare_ddns:alpine-sh
 ```
 
 ### Prebuilt image
@@ -57,6 +57,6 @@ BIND_TEMPLATE_NOPROXY=
 Pull and run the image:
 ```
 $ docker run -d --env-file .env \
-    mircopergreffi/cloudflare_ddns_updater:alpine-sh
+    mircopergreffi/cloudflare_ddns:alpine-sh
 
 ```
