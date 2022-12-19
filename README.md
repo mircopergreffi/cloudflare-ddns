@@ -61,7 +61,7 @@ Template variables:
 
 Pull the repository:
 ```
-$ git clone -b alpine-sh https://github.com/mircopergreffi/cloudflare-ddns
+$ git clone https://github.com/mircopergreffi/cloudflare-ddns
 $ cd cloudflare-ddns
 ```
 
