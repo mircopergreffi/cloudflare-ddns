@@ -1,59 +1,49 @@
 
 #include <stdio.h>
-#include <curl/curl.h>
+#include <stdlib.h>
+// #include <curl/curl.h>
+#include "cloudflare.h"
 
-
-void get_ip(CURL *handle, char* ip)
+char * get_env(const char *name)
 {
-	curl_easy_setopt(handle, CURLOPT_URL, "https://cloudflare.com/cdn-cgi/trace");
-	CURLcode res = curl_easy_perform(handle);
-	if(res != CURLE_OK)
-		fprintf(stderr, "curl_easy_perform() failed: %s\n",
-			curl_easy_strerror(res));
-
-	char key[20], value[20];
-	sscanf(chunk.response, "%s=%s", &key, &value);
-	printf(key);
+	char *value = getenv(name);
+	if (value == NULL)
+	{
+		printf("Environment variable %s not set\n", name);
+		exit(1);
+	}
+	return value;
 }
 
-void get_dns_records(CURL *handle)
+char * get_env_and_print(const char *name)
 {
-
+	char *value = get_env(name);
+	printf("%s: %s\n", name, value);
+	return value;
 }
 
 int main(int argc, char** argv)
 {
-	// system("export IP=$(wget -qO - https://cloudflare.com/cdn-cgi/trace | grep ip | sed \"s/ip=//g\")");
-	// system("echo $IP");
-
-	// printf("%s",getenv("IP"));
-
-	printf("ZONEID = %s\n",getenv("ZONEID"));
-	printf("UPDATE_INTERVAL = %s\n",getenv("UPDATE_INTERVAL"));
-	printf("DOMAIN = %s\n",getenv("DOMAIN"));
-	printf("BIND_TEMPLATE = %s\n",getenv("BIND_TEMPLATE"));
-	printf("BIND_TEMPLATE_NOPROXY = %s\n",getenv("BIND_TEMPLATE_NOPROXY"));
-
-	// Initialize libcurl
-	CURL *curl;
-	curl = curl_easy_init();
-	if (!curl)
+	printf("Reading environment variables:\n");
+	char *token = get_env("TOKEN");
+	char *zoneid = get_env_and_print("ZONEID");
+	char *update_interval = get_env_and_print("UPDATE_INTERVAL");
+	char *domain = get_env_and_print("DOMAIN");
+	char *bind_template = get_env_and_print("BIND_TEMPLATE");
+	char *bind_template_noproxy = get_env_and_print("BIND_TEMPLATE_NOPROXY");
+	printf("--------------------------------\n");
+	printf("Initializing Cloudflare API:\n");
+	CloudFlare *cloudflare = cloudflare_init(token);
+	if (cloudflare)
 	{
-		printf("Cannot initialize libcurl");
+		printf("Cloudflare API initialized\n");
+		printf("Requesting zones:\n");
+		cloudflare_request(cloudflare, "GET", "https://api.cloudflare.com/client/v4/zones");
 	}
 	else
 	{
-		// Print libcurl version
-		printf("libcurl version %s\n", curl_version());
-
-		// Main code
-
-		// Curl cleanup
-		curl_easy_cleanup(curl);
+		printf("Cloudflare API initialization failed\n");
 	}
-
-	// Global cleanup
-	curl_global_cleanup();
-
+	cloudflare_cleanup(cloudflare);
 	return 0;
 }
