@@ -1,5 +1,6 @@
 CC=gcc
-CFLAGS=-I. -lcurl
+CFLAGS=-O3 -lc
+STATIC=/usr/lib/libcurl.a /usr/lib/libnghttp2.a /usr/lib/libidn2.a /usr/lib/libunistring.a /usr/lib/libbrotlidec.a /usr/lib/libbrotlicommon.a /usr/lib/libcrypto.a /usr/lib/libssl.a /lib/libz.a
 DEPS=request.h cloudflare.h
 OBJ=main.o requests.o cloudflare.o
 
@@ -7,4 +8,4 @@ OBJ=main.o requests.o cloudflare.o
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 build: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(STATIC) $(CFLAGS)

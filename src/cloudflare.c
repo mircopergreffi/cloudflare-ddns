@@ -1,5 +1,6 @@
 
 #include <string.h>
+#include <stdlib.h>
 #include "cloudflare.h"
 #include "requests.h"
 
@@ -17,7 +18,6 @@ CloudFlare * cloudflare_init(char *token)
 	cloudflare->token = (char*) malloc(strlen(HEADER_AUTH) + strlen(token) + 1);
 	strcat(cloudflare->token, HEADER_AUTH);
 	strcat(cloudflare->token, token);
-	printf("Token: %s\n", cloudflare->token);
 	// Return cloudflare
 	return cloudflare;
 }
@@ -42,5 +42,5 @@ void cloudflare_request(CloudFlare *cloudflare, char *method, char *url)
 	request_set_header(cloudflare->curl, cloudflare->token);
 	request_set_header(cloudflare->curl, "Content-Type: application/json");
 	// Perform request
-	return request_perform(cloudflare->curl);
+	request_perform(cloudflare->curl);
 }

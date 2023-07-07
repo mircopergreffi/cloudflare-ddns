@@ -28,6 +28,7 @@ void request_prepare(CURL *curl, char *method, char *URL)
 	// Set method
 	curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, method);
     // Disable console output
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
 }
 
