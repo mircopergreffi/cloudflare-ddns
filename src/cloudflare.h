@@ -7,18 +7,18 @@
 struct CloudFlare_blob
 {
 	char *token;
-	CURL *curl;
+	char *authorization_header;
 };
 
 typedef struct CloudFlare_blob CloudFlare;
 
 // Init Cloudflare API
-CloudFlare * cloudflare_init(char *token);
+extern CloudFlare cloudflare_init(char *token);
 
 // Clear Cloudflare API
-void cloudflare_cleanup(CloudFlare *cloudflare);
+extern void cloudflare_cleanup(const CloudFlare cloudflare);
 
 // Cloudflare API request
-void cloudflare_request(CloudFlare *cloudflare, char *method, char *url);
+extern Response cloudflare_request(const CloudFlare cloudflare, const char *method, const char *url);
 
 #endif /* CLOUDFLARE_H */

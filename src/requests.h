@@ -4,19 +4,30 @@
 
 #include <curl/curl.h>
 
+struct Response_T {
+    char *memory;
+    size_t size;
+};
+typedef struct Response_T Response;
+
 // Function to initialize curl
-CURL * request_init(void);
+extern CURL * request_init(void);
 
 // Function clean up curl
-void request_cleanup(CURL *curl);
+extern void request_cleanup(CURL *curl);
 
 // Function to prepare the request
-void request_prepare(CURL *curl, char *method, char *URL);
+extern void request_prepare(CURL *curl, const char *method, const char *URL, const Response *response);
 
 // Function to set one header
-void request_set_header(CURL *curl, char *header);
+extern void request_set_header(CURL *curl, const char *header);
 
 // Function to perform the request
-CURLcode request_perform(CURL *curl);
+extern CURLcode request_perform(CURL *curl);
+
+extern Response request(const char *method, const char *url, const char **headers, const size_t headers_count);
+
+extern Response response_init();
+extern void response_cleanup(Response response);
 
 #endif /* REQUESTS_H */
