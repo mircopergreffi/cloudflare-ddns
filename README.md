@@ -3,12 +3,10 @@
 Simple C application wrapped into a container for updating Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
   
-The container is built from scratch and only contains the executable and SSL certficates in order to minimize its footprint.
+The container is built from scratch and only contains the statically-linked executable and SSL certficates in order to minimize its footprint.
   
-The uncompressed image size is **5.6MB**.  
+The compressed image size is **2.4MB**.  
 
-RAM usage is roughly **1MB**.
-  
 A special thanks to [@gmasini97](https://github.com/gmasini97) for the contributions.
 
 ## How It Works
@@ -18,6 +16,17 @@ The IP is checked using Cloudflare APIs (https://cloudflare.com/cdn-cgi/trace).
 Then deletes all DNS records (except for CNAME records).  
 Generate new DNS records from the specified template (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`).  
 Set `UPDATE_INTERVAL` to a negative number (i.e.: `-1`) for updating the DNS records once and exiting.  
+
+## Resource Usage
+
+  
+The UNcompressed image size is **5.6MB**.  
+  
+RAM usage is roughly **1MB**.  
+  
+Network usage depends on how frequent you want to check for IP changes. Setting `UPDATE_INTERVAL` to `30` gives these consumptions:  
+- Data received: **720KB/h**  
+- Data sent: **260KB/h**  
 
 ## Prerequisites
 This documentation assumes you already have a Cloudflare account set up with a domain registered.  
