@@ -1,13 +1,18 @@
 # Cloudflare DDNS
 
-Simple bash script for updating Cloudflare DNS records.  
+Simple C application wrapped into a container for updating Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
   
-The uncompressed image size is almost 10MB.  
+The container is built from scratch and only contains the executable and SSL certficated in order to minimize its footprint.
+  
+The uncompressed image size is **5.6MB**.  
+  
+A special thanks to [@gmasini97](https://github.com/gmasini97) for the contributions.
 
 ## How It Works
 
 Waits for your public IP to change, it checks for changes with a set time interval (`UPDATE_INTERVAL`).  
+The IP is checked using Cloudflare APIs (https://cloudflare.com/cdn-cgi/trace).  
 Then deletes all DNS records (except for CNAME records).  
 Generate new DNS records from the specified template (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`).  
 Set `UPDATE_INTERVAL` to a negative number (i.e.: `-1`) for updating the DNS records once and exiting.  
@@ -33,7 +38,7 @@ curl -X GET "https://api.cloudflare.com/client/v4/zones" \
      -H "Authorization: Bearer YOUR_TOKEN" \
      -H "Content-Type: application/json"
 ```
-Replace YOUR_TOKEN with the previously generated token.  
+Replace `YOUR_TOKEN` with the previously generated token.  
 
 ## Environment Variables
 
