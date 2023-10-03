@@ -11,12 +11,12 @@ A special thanks to [@gmasini97](https://github.com/gmasini97) for the contribut
 
 ## How It Works
 
-Waits for your public IP to change, it checks for changes with a set time interval (`UPDATE_INTERVAL`, see [Environment Variables](#-environment-variables)).  
+Waits for your public IP to change, it checks for changes with a set time interval (`UPDATE_INTERVAL`, see [Environment Variables](#environment-variables)).  
 The IP is checked using Cloudflare APIs (https://cloudflare.com/cdn-cgi/trace).  
 
 Then deletes all DNS records (except for CNAME records).  
 
-Generate new DNS records from the specified templates (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`, see [Environment Variables](#-environment-variables)).  
+Generate new DNS records from the specified templates (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`, see [Environment Variables](#environment-variables)).  
 
 Set `UPDATE_INTERVAL` to a negative number (i.e.: `-1`) for updating the DNS records once and exiting.  
 
