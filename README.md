@@ -3,7 +3,7 @@
 Simple C application wrapped into a container for updating Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
   
-The container is built from scratch and only contains the executable and SSL certficated in order to minimize its footprint.
+The container is built from scratch and only contains the executable and SSL certficates in order to minimize its footprint.
   
 The uncompressed image size is **5.6MB**.  
   
