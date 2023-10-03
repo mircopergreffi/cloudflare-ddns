@@ -144,10 +144,10 @@ int main(int argc, char** argv)
             printf("Importing BIND_NOPROXY:\n");
             cloudflare_import(cloudflare, params.zone_id, bind_noproxy, CLOUDFLARE_NOT_PROXIED);
 
-            printf("Cleaning up CloudFlare:\n");
+            printf("Cleaning up CloudFlare\n");
             cloudflare_cleanup(cloudflare);
 
-            printf("Updating previous IP:\n");
+            printf("Updating previous IP\n");
             strcpy(previousIp, ip);
         }
 
@@ -158,7 +158,7 @@ int main(int argc, char** argv)
         }
     } while (params.update_interval > 0);
     // Cleanup global curl
-    printf("Cleaning up curl:\n");
+    printf("Cleaning up curl\n");
     curl_global_cleanup();
 
     printf("Exiting\n");
