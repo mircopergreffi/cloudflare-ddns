@@ -5,7 +5,6 @@
 #include "requests.h"
 
 #define HEADER_AUTH "Authorization: Bearer "
-#define FILENAME "tmp.txt"
 #define API_THROTTLE_SLEEP 1
 
 CloudFlare cloudflare_init(char *token)
