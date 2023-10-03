@@ -14,7 +14,7 @@ A special thanks to [@gmasini97](https://github.com/gmasini97) for the contribut
 Waits for your public IP to change, it checks for changes with a set time interval (`UPDATE_INTERVAL`, see [Environment Variables](#environment-variables)).  
 The IP is checked using Cloudflare APIs (https://cloudflare.com/cdn-cgi/trace).  
 
-Then deletes all DNS records (except for CNAME records).  
+Then deletes all DNS records, except for CNAME records if `SKIP_CNAME` is set to `1` (see [Environment Variables](#environment-variables)).  
 
 Generate new DNS records from the specified templates (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`, see [Environment Variables](#environment-variables)).  
 
