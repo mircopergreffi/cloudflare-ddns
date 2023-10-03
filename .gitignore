@@ -4,3 +4,4 @@ env
 *.o
 src/build
 src/debug
+src/tmp.txt

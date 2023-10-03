@@ -10,6 +10,11 @@ struct Response_T {
 };
 typedef struct Response_T Response;
 
+struct MultipartData_T {
+    char *name;
+    char *data;
+};
+
 // Function to initialize curl
 extern CURL * request_init(void);
 
@@ -26,6 +31,15 @@ extern void request_set_header(CURL *curl, const char *header);
 extern CURLcode request_perform(CURL *curl);
 
 extern Response request(const char *method, const char *url, const char **headers, const size_t headers_count);
+
+extern Response request_multipart(
+    const char *method,
+    const char *url,
+    const char **headers,
+    const size_t headers_count,
+    const struct MultipartData_T *data,
+    const size_t data_count
+);
 
 extern Response response_init();
 extern void response_cleanup(Response response);

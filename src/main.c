@@ -50,43 +50,41 @@ void handle_zones(const Parameters params, const CloudFlare cloudflare, const Re
     const char *itemBuf;
     int itemLen = 0;
 
-    const char *typeBuf;
-    int typeLen = 0;
-    const char *idBuf;
-    int idLen = 0;
-    const char *nameBuf;
-    int nameLen = 0;
+    const char typeBuf[256];
+    const char idBuf[256];
+    const char nameBuf[256];
 
     char url[256];
 
     while (1)
     {
+
         next = mjson_next(buf, len, next, &koff, &klen, NULL, NULL, NULL);
         if (next == 0)
         {
             break;
         }
 
-        sprintf(selector, "$[%d]", koff);
+        snprintf(selector, 128, "$[%d]", koff);
         if (mjson_find(buf, len, selector, &itemBuf, &itemLen) != MJSON_TOK_OBJECT)
         {
             printf("Error while parsing json: %s is not an object\n", selector);
             exit(1);
         }
 
-        if (mjson_find(itemBuf, itemLen, "$.type", &typeBuf, &typeLen) != MJSON_TOK_STRING)
+        if (mjson_get_string(itemBuf, itemLen, "$.type", typeBuf, 256) < 0)
         {
             printf("Error while parsing json: $.type is not a string\n");
             exit(1);
         }
 
-        if (mjson_find(itemBuf, itemLen, "$.id", &idBuf, &idLen) != MJSON_TOK_STRING)
+        if (mjson_get_string(itemBuf, itemLen, "$.id", idBuf, 256) < 0)
         {
             printf("Error while parsing json: $.id is not a string\n");
             exit(1);
         }
 
-        if (mjson_find(itemBuf, itemLen, "$.name", &nameBuf, &nameLen) != MJSON_TOK_STRING)
+        if (mjson_get_string(itemBuf, itemLen, "$.name", nameBuf, 256) < 0)
         {
             printf("Error while parsing json: $.name is not a string\n");
             exit(1);
@@ -94,23 +92,17 @@ void handle_zones(const Parameters params, const CloudFlare cloudflare, const Re
 
         if (strcmp(typeBuf, "CNAME") == 0 && params.skip_cname)
         {
-            printf("Skipping CNAME id=%.*s name=%.*s\n", idLen, idBuf, nameLen, nameBuf);
+            printf("Skipping CNAME id=%s name=%s\n", idBuf, nameBuf);
         }
         else
         {
-            printf("Deleting record id=%.*s name=%.*s\n", idLen, idBuf, nameLen, nameBuf);
-            sprintf(url, "https://api.cloudflare.com/client/v4/zones/%s/dns_records/%.*s", params.zone_id, idLen, idBuf);
+            printf("Deleting record id=%s name=%s\n", idBuf, nameBuf);
+            snprintf(url, 256, "https://api.cloudflare.com/client/v4/zones/%s/dns_records/%s", params.zone_id, idBuf);
             Response mem = cloudflare_request(cloudflare, "DELETE", url);
             printf("%s\n", mem.memory);
             response_cleanup(mem);
         }
     }
-
-    free((void *)buf);
-    free((void *)itemBuf);
-    free((void *)typeBuf);
-    free((void *)idBuf);
-    free((void *)nameBuf);
 }
 
 
@@ -120,24 +112,52 @@ int main(int argc, char** argv)
     Parameters params = get_parameters();
 
     char ip[32];
-    get_ip(ip);
-    printf("IP: %s\n", ip);
+    char previousIp[32];
 
-    printf("Initializing CloudFlare API:\n");
-    CloudFlare cloudflare = cloudflare_init(params.token);
+    do
+    {
+        get_ip(ip);
+        printf("last IP: %s\n", previousIp);
+        printf("current IP: %s\n", ip);
 
-    printf("Requesting zones:\n");
-    char url[256];
-    sprintf(url, "https://api.cloudflare.com/client/v4/zones/%s/dns_records", params.zone_id);
-    Response mem = cloudflare_request(cloudflare, "GET", url);
-    // printf(">>%s<<\n", mem.memory);
-    handle_zones(params, cloudflare, mem);
-    response_cleanup(mem);
+        char *bind = replace_bind(params.bind_template, ip, params.domain);
+        char *bind_noproxy = replace_bind(params.bind_template_noproxy, ip, params.domain);
+        printf("---- BIND:\n%s\n----\n", bind);
+        printf("---- BIND_NOPROXY:\n%s\n----\n", bind_noproxy);
 
-    printf("Cleaning up CloudFlare:\n");
-    cloudflare_cleanup(cloudflare);
+        if (strcmp(ip, previousIp) != 0)
+        {
+            printf("Initializing CloudFlare API:\n");
+            CloudFlare cloudflare = cloudflare_init(params.token);
+
+            printf("Requesting zones:\n");
+            char url[256];
+            snprintf(url, 256, "https://api.cloudflare.com/client/v4/zones/%s/dns_records", params.zone_id);
+            Response mem = cloudflare_request(cloudflare, "GET", url);
+            // printf(">>%s<<\n", mem.memory);
+            handle_zones(params, cloudflare, mem);
+            response_cleanup(mem);
+
+            printf("Importing BIND:\n");
+            cloudflare_import(cloudflare, params.zone_id, bind, CLOUDFLARE_PROXIED);
+
+            printf("Importing BIND_NOPROXY:\n");
+            cloudflare_import(cloudflare, params.zone_id, bind_noproxy, CLOUDFLARE_NOT_PROXIED);
+
+            printf("Cleaning up CloudFlare:\n");
+            cloudflare_cleanup(cloudflare);
+
+            printf("Updating previous IP:\n");
+            strcpy(previousIp, ip);
+        }
+
+        if (params.update_interval > 0)
+        {
+            printf("Sleeping for %d seconds\n", params.update_interval);
+            sleep(params.update_interval);
+        }
+    } while (params.update_interval > 0);
     // Cleanup global curl
-
     printf("Cleaning up curl:\n");
     curl_global_cleanup();
 

@@ -18,6 +18,10 @@ extern char * get_env(const char *name);
 
 extern char * get_env_and_print(const char *name);
 
+extern char * str_replace(char *str, const char *pattern, const char *newvalue);
+
+extern char * replace_bind(char *bind_template, const char *ip, const char *domain);
+
 extern Parameters get_parameters();
 
 #endif /* PARAMETERS_H */
