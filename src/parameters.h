@@ -4,7 +4,7 @@
 
 struct Parameters_T
 {
-	char *token;
+    char *token;
     char *zone_id;
     int update_interval;
     char *domain;

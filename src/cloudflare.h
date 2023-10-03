@@ -9,8 +9,8 @@
 
 struct CloudFlare_blob
 {
-	char *token;
-	char *authorization_header;
+    char *token;
+    char *authorization_header;
 };
 
 typedef struct CloudFlare_blob CloudFlare;
