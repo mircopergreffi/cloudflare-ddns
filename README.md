@@ -6,6 +6,8 @@ It allows you to use Cloudflare as a Dynamic DNS.
 The container is built from scratch and only contains the executable and SSL certficates in order to minimize its footprint.
   
 The uncompressed image size is **5.6MB**.  
+
+RAM usage is roughly **1MB**.
   
 A special thanks to [@gmasini97](https://github.com/gmasini97) for the contributions.
 
