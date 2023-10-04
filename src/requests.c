@@ -27,7 +27,7 @@ size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *user
     char *ptr = realloc(mem->memory, mem->size + realsize + 1);
     if(!ptr) {
         /* out of memory! */
-        printf("not enough memory (realloc returned NULL)\n");
+        printf("not enough memory (realloc returned NULL)\r\n");
         return 0;
     }
 
@@ -42,7 +42,7 @@ size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *user
 void request_prepare(CURL *curl, const char *method, const char *URL, const Response *response)
 {
     // Log
-    printf("Request: %s %s\n", method, URL);
+    printf("Request: %s %s\r\n", method, URL);
     // Set url
     curl_easy_setopt(curl, CURLOPT_URL, URL);
     // Set method
@@ -81,11 +81,11 @@ CURLcode request_perform(CURL *curl)
     {
         long response_code;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-        printf("Response code: %ld\n", response_code);
+        printf("Response code: %ld\r\n", response_code);
     }
     else
     {
-        printf("Request failed: %s\n", curl_easy_strerror(res));
+        printf("Request failed: %s\r\n", curl_easy_strerror(res));
     }
     return res;
 }

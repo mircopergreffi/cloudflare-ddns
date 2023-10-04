@@ -32,7 +32,7 @@ Response cloudflare_request(const CloudFlare cloudflare, const char *method, con
 {
     sleep(API_THROTTLE_SLEEP);
     if (strncmp(url, "https", 5) != 0){
-        printf("Error: url must be https\n");
+        printf("Error: url must be https\r\n");
         exit(1);
     } else {
         const char *headers[] = {cloudflare.authorization_header, "Content-Type: application/json"};
@@ -59,7 +59,7 @@ void cloudflare_import(const CloudFlare cloudflare, const char* zone_id, const c
         2
     );
 
-    printf("%s\n", r.memory);
+    printf("%s\r\n", r.memory);
 
     response_cleanup(r);
 }

@@ -8,7 +8,7 @@ char * get_env(const char *name)
     char *value = getenv(name);
     if (value == NULL)
     {
-        printf("Environment variable %s not set\n", name);
+        printf("Environment variable %s not set\r\n", name);
         exit(1);
     }
     return value;
@@ -17,7 +17,7 @@ char * get_env(const char *name)
 char * get_env_and_print(const char *name)
 {
     char *value = get_env(name);
-    printf("%s: %s\n", name, value);
+    printf("%s: %s\r\n", name, value);
     return value;
 }
 
@@ -62,7 +62,7 @@ char * replace_bind(char *bind_template, const char *ip, const char *domain)
 {
     char *a = str_replace(bind_template, "%ip%", ip);
     char *b = str_replace(a, "%domain%", domain);
-    char *c = str_replace(b, ";", "\n");
+    char *c = str_replace(b, ";", "\r\n");
     free(a);
     free(b);
     return c;
