@@ -1,7 +1,7 @@
 FROM alpine AS build
 WORKDIR /root/build
-RUN apk add --no-cache build-base curl-dev yaml-dev
-RUN apk add --no-cache curl-static yaml-static nghttp2-static libidn2-static libunistring-static brotli-static openssl-libs-static zlib-static
+RUN apk add --no-cache build-base curl-dev
+RUN apk add --no-cache curl-static nghttp2-static libidn2-static libunistring-static brotli-static openssl-libs-static zlib-static
 COPY ./src .
 RUN make clean build
 
