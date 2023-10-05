@@ -1,29 +1,49 @@
 # Cloudflare DDNS
 
-Simple bash script for updating Cloudflare DNS records.  
+Simple C application wrapped into a container for updating Cloudflare DNS records.  
 It allows you to use Cloudflare as a Dynamic DNS.  
-  
-The uncompressed image size is almost 10MB.  
+
+The container is built from scratch and only contains the statically-linked executable and SSL certficates in order to minimize its footprint.
+
+The compressed image size is **2.4MB**.  
+
+A special thanks to [@gmasini97](https://github.com/gmasini97) for the contributions.
 
 ## How It Works
 
-Waits for your public IP to change, it checks for changes with a set time interval (`UPDATE_INTERVAL`).  
-Then deletes all DNS records (except for CNAME records).  
-Generate new DNS records from the specified template (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`).  
+Waits for your public IP to change, it checks for changes with a set time interval (`UPDATE_INTERVAL`, see [Environment Variables](#environment-variables)).  
+The IP is checked using Cloudflare APIs (https://cloudflare.com/cdn-cgi/trace).  
+
+Then deletes all DNS records, except for CNAME records if `SKIP_CNAME` is set to `1` (see [Environment Variables](#environment-variables)).  
+
+Generate new DNS records from the specified templates (`BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY`, see [Environment Variables](#environment-variables)).  
+
 Set `UPDATE_INTERVAL` to a negative number (i.e.: `-1`) for updating the DNS records once and exiting.  
+
+When the container is started it will always udpate the records at least once.
+
+## Resource Usage
+
+The UNcompressed image size is **5.6MB**.  
+
+RAM usage is roughly **1MB**.  
+
+Network usage depends on how frequent you want to check for IP changes. Setting `UPDATE_INTERVAL` to `30` gives these consumptions:  
+- Data received: **720KB/h**  
+- Data sent: **260KB/h**  
 
 ## Prerequisites
 This documentation assumes you already have a Cloudflare account set up with a domain registered.  
 
 ### Generate an API Token
 
-Visit https://dash.cloudflare.com/profile/api-tokens.  
-Click the "Create Token" button.  
-Use the template "Edit zone DNS".  
-In the "Zone Resources" section choose: "Include", "Specific Zone" and the zone.  
-Scroll to the bottom and click the "Continue to summary" button.  
-Click the "Create Token" button.  
-Copy your newly generate token.  
+1. Visit https://dash.cloudflare.com/profile/api-tokens.  
+2. Click the "Create Token" button.  
+3. Use the template "Edit zone DNS".  
+4. In the "Zone Resources" section choose: "Include", "Specific Zone" and the zone.  
+5. Scroll to the bottom and click the "Continue to summary" button.  
+6. Click the "Create Token" button.  
+7. Copy your newly generate token.  
 
 ### List your ZoneIDs
 
@@ -33,7 +53,7 @@ curl -X GET "https://api.cloudflare.com/client/v4/zones" \
      -H "Authorization: Bearer YOUR_TOKEN" \
      -H "Content-Type: application/json"
 ```
-Replace YOUR_TOKEN with the previously generated token.  
+Replace `YOUR_TOKEN` with the previously generated token.  
 
 ## Environment Variables
 
