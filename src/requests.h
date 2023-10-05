@@ -3,45 +3,36 @@
 #define REQUESTS_H
 
 #include <curl/curl.h>
+#include "request_result.h"
 
-struct Response_T {
-    char *memory;
-    size_t size;
-};
-typedef struct Response_T Response;
-
-struct MultipartData_T {
+struct MultipartData {
     char *name;
     char *data;
 };
 
+extern long request_get_http_code(CURL *curl);
+
 // Function to initialize curl
-extern CURL * request_init(void);
+extern int request_init(CURL **curl);
 
 // Function clean up curl
-extern void request_cleanup(CURL *curl);
+extern int request_cleanup(CURL *curl);
 
 // Function to prepare the request
-extern void request_prepare(CURL *curl, const char *method, const char *URL, const Response *response);
-
-// Function to set one header
-extern void request_set_header(CURL *curl, const char *header);
+extern int request_prepare(CURL *curl, const char *method, const char *URL, const struct curl_slist *headers, const struct Response *response);
 
 // Function to perform the request
-extern CURLcode request_perform(CURL *curl);
+extern int request_perform(CURL *curl);
 
-extern Response request(const char *method, const char *url, const char **headers, const size_t headers_count);
+extern struct RequestResult request(const char *method, const char *url, const char **headers, const size_t headers_count);
 
-extern Response request_multipart(
+extern struct RequestResult request_multipart(
     const char *method,
     const char *url,
     const char **headers,
     const size_t headers_count,
-    const struct MultipartData_T *data,
+    const struct MultipartData *data,
     const size_t data_count
 );
-
-extern Response response_init();
-extern void response_cleanup(Response response);
 
 #endif /* REQUESTS_H */

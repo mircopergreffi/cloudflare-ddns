@@ -2,7 +2,7 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-struct Parameters_T
+struct Parameters
 {
     char *token;
     char *zone_id;
@@ -12,7 +12,6 @@ struct Parameters_T
     char *bind_template_noproxy;
     int skip_cname;
 };
-typedef struct Parameters_T Parameters;
 
 extern char * get_env(const char *name);
 
@@ -22,6 +21,6 @@ extern char * str_replace(char *str, const char *pattern, const char *newvalue);
 
 extern char * replace_bind(char *bind_template, const char *ip, const char *domain);
 
-extern Parameters get_parameters();
+extern struct Parameters get_parameters();
 
 #endif /* PARAMETERS_H */

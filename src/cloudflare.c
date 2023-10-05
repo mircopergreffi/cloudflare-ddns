@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "cloudflare.h"
 #include "requests.h"
+#include "log_utils.h"
 
 #define HEADER_AUTH "Authorization: Bearer "
 #define API_THROTTLE_SLEEP 1
@@ -28,11 +29,11 @@ void cloudflare_cleanup(const CloudFlare cloudflare)
 }
 
 // Cloudflare API request
-Response cloudflare_request(const CloudFlare cloudflare, const char *method, const char *url)
+struct RequestResult cloudflare_request(const CloudFlare cloudflare, const char *method, const char *url)
 {
     sleep(API_THROTTLE_SLEEP);
     if (strncmp(url, "https", 5) != 0){
-        printf("Error: url must be https\n");
+        LOG_ERROR("Error: url must be https");
         exit(1);
     } else {
         const char *headers[] = {cloudflare.authorization_header, "Content-Type: application/json"};
@@ -47,19 +48,17 @@ void cloudflare_import(const CloudFlare cloudflare, const char* zone_id, const c
     snprintf(url, 256, "https://api.cloudflare.com/client/v4/zones/%s/dns_records/import", zone_id);
 
     const char *headers[] = {cloudflare.authorization_header, "Content-Type: multipart/form-data"};
-    Response r = request_multipart(
+    struct RequestResult r = request_multipart(
         "POST",
         url,
         headers,
         2,
-        (struct MultipartData_T[]){
+        (struct MultipartData[]){
             {"file", bind},
             {"proxied", proxied}
         },
         2
     );
 
-    printf("%s\n", r.memory);
-
-    response_cleanup(r);
+    request_result_cleanup(&r);
 }
