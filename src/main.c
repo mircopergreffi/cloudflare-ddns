@@ -35,11 +35,6 @@ int main(int argc, char** argv)
         LOG_INFO("last IP: %s", previousIp);
         LOG_INFO("current IP: %s", ip);
 
-        char *bind = replace_bind(params.bind_template, ip, params.domain);
-        char *bind_noproxy = replace_bind(params.bind_template_noproxy, ip, params.domain);
-        LOG_INFO("---- BIND:%s%s%s----", NEWLINE, bind, NEWLINE);
-        LOG_INFO("---- BIND_NOPROXY:%s%s%s----", NEWLINE, bind_noproxy, NEWLINE);
-
         if (strcmp(ip, previousIp) != 0)
         {
             LOG_INFO("Initializing CloudFlare API");
@@ -54,11 +49,20 @@ int main(int argc, char** argv)
             TRY(sub_handle_zones(params, cloudflare, mem));
             request_result_cleanup(&rr);
 
+            char *bind = replace_bind(params.bind_template, ip, params.domain);
+            char *bind_noproxy = replace_bind(params.bind_template_noproxy, ip, params.domain);
+            LOG_INFO("---- BIND:%s%s%s----", NEWLINE, bind, NEWLINE);
+            LOG_INFO("---- BIND_NOPROXY:%s%s%s----", NEWLINE, bind_noproxy, NEWLINE);
+
             LOG_INFO("Importing BIND");
             cloudflare_import(cloudflare, params.zone_id, bind, CLOUDFLARE_PROXIED);
 
             LOG_INFO("Importing BIND_NOPROXY");
             cloudflare_import(cloudflare, params.zone_id, bind_noproxy, CLOUDFLARE_NOT_PROXIED);
+
+            LOG_DEBUG("Freeing bind and bind_noproxy");
+            free(bind);
+            free(bind_noproxy);
 
             LOG_INFO("Cleaning up CloudFlare");
             cloudflare_cleanup(cloudflare);
@@ -66,9 +70,6 @@ int main(int argc, char** argv)
             LOG_INFO("Updating previous IP");
             strcpy(previousIp, ip);
         }
-
-        free(bind);
-        free(bind_noproxy);
     } while (params.update_interval > 0);
     // Cleanup global curl
     LOG_INFO("Cleaning up curl");
