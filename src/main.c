@@ -66,6 +66,9 @@ int main(int argc, char** argv)
             LOG_INFO("Updating previous IP");
             strcpy(previousIp, ip);
         }
+
+        free(bind);
+        free(bind_noproxy);
     } while (params.update_interval > 0);
     // Cleanup global curl
     LOG_INFO("Cleaning up curl");
