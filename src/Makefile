@@ -7,14 +7,14 @@ ifeq ($(DEBUG), 1)
 	CFLAGS=-g3 --static -D LOG_LEVEL=$(LOG_LEVEL)
 else
 	ifndef LOG_LEVEL
-		LOG_LEVEL=1000
+		LOG_LEVEL=1
 	endif
 	CFLAGS=-Os -s -flto -ffunction-sections -fdata-sections --static -D LOG_LEVEL=$(LOG_LEVEL)
 endif
 
-DEPS=request.h cloudflare.h parameters.h mjson.h reponse.h request_result.h log_utils.h
+DEPS=request.h cloudflare.h parameters.h mjson.h reponse.h request_result.h log_utils.h errors.h
 
-OBJ=main.o requests.o cloudflare.o parameters.o mjson.o request_result.o response.o
+OBJ=main.o requests.o cloudflare.o parameters.o mjson.o request_result.o response.o sub.o
 
 STATIC=/usr/lib/libcurl.a /usr/lib/libnghttp2.a /usr/lib/libidn2.a /usr/lib/libunistring.a /usr/lib/libbrotlidec.a /usr/lib/libbrotlicommon.a /usr/lib/libcrypto.a /usr/lib/libssl.a /lib/libz.a
 

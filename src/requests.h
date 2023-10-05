@@ -6,8 +6,8 @@
 #include "request_result.h"
 
 struct MultipartData {
-    char *name;
-    char *data;
+    const char *name;
+    const char *data;
 };
 
 extern long request_get_http_code(CURL *curl);

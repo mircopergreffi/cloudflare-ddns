@@ -4,6 +4,7 @@
 #include "cloudflare.h"
 #include "requests.h"
 #include "log_utils.h"
+#include <unistd.h>
 
 #define HEADER_AUTH "Authorization: Bearer "
 #define API_THROTTLE_SLEEP 1

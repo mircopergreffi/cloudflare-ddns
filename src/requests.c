@@ -4,6 +4,7 @@
 #include <string.h>
 #include <curl/curl.h>
 #include "log_utils.h"
+#include "errors.h"
 
 #define CATCH(x) if (x != 0) { return request_result_init_error(x); };
 
@@ -34,10 +35,12 @@ struct RequestResult request(
     const size_t headers_count
 )
 {
+    int err;
     TRACE_START();
     struct Response response = response_init();
     CURL* curl;
-    CATCH(request_init(&curl));
+    err = request_init(&curl);
+    CATCH(err);
 
     LOG_DEBUG("Creating headers list");
     struct curl_slist *headerlist = curl_slist_append(NULL, "User-Agent: libcurl-agent/1.0");
@@ -45,13 +48,17 @@ struct RequestResult request(
     {
         headerlist = curl_slist_append(headerlist, headers[i]);
     }
-    CATCH(headerlist == NULL ? REQUEST_RESULT_INIT_ERROR_HEADERS : 0);
-    CATCH(request_prepare(curl, method, url, headerlist, &response));
-    CATCH(request_perform(curl));
+    err = headerlist == NULL ? ERROR_REQUEST_HEADERS : 0;
+    CATCH(err);
+    err = request_prepare(curl, method, url, headerlist, &response);
+    CATCH(err);
+    err = request_perform(curl);
+    CATCH(err);
 
     long status_code = request_get_http_code(curl);
 
-    CATCH(request_cleanup(curl));
+    err = request_cleanup(curl);
+    CATCH(err);
 
     curl_slist_free_all(headerlist);
 
@@ -70,9 +77,9 @@ int request_init(CURL **curl)
     if (*curl == NULL)
     {
         LOG_ERROR("Error: curl_easy_init() failed");
-        return REQUEST_RESULT_INIT_ERROR_REQUEST_INIT;
+        return ERROR_REQUEST_INIT;
     }
-    return 0;
+    return NO_ERROR;
 }
 
 int request_cleanup(CURL *curl)
@@ -83,10 +90,10 @@ int request_cleanup(CURL *curl)
         curl_easy_cleanup(curl);
     } else {
         LOG_ERROR("Cannot cleanup curl: curl is NULL");
-        return REQUEST_RESULT_INIT_ERROR_REQUEST_CLEANUP;
+        return ERROR_REQUEST_CLEANUP;
     }
     TRACE_END();
-    return 0;
+    return NO_ERROR;
 }
 
 int request_prepare(CURL *curl, const char *method, const char *URL, const struct curl_slist *headers, const struct Response *response)
@@ -116,7 +123,7 @@ int request_prepare(CURL *curl, const char *method, const char *URL, const struc
     }
 
     TRACE_END();
-    return 0;
+    return NO_ERROR;
 }
 
 int request_perform(CURL *curl)
@@ -126,10 +133,10 @@ int request_perform(CURL *curl)
     if (code != CURLE_OK)
     {
         LOG_ERROR("Error: curl_easy_perform() failed: %s", curl_easy_strerror(code));
-        return REQUEST_RESULT_INIT_ERROR_REQUEST_PERFORM;
+        return ERROR_REQUEST_PERFORM;
     }
     TRACE_END();
-    return 0;
+    return NO_ERROR;
 }
 
 long request_get_http_code(CURL *curl)
@@ -151,9 +158,11 @@ struct RequestResult request_multipart(
     const size_t data_count
 )
 {
+    int err;
     TRACE_START();
     CURL* curl;
-    CATCH(request_init(&curl));
+    err = request_init(&curl);
+    CATCH(err);
 
     CURLM *multi_handle = curl_multi_init();
     curl_mime *form = curl_mime_init(curl);
@@ -168,8 +177,10 @@ struct RequestResult request_multipart(
     {
         headerlist = curl_slist_append(headerlist, headers[i]);
     }
-    CATCH(headerlist == NULL ? REQUEST_RESULT_INIT_ERROR_HEADERS : 0);
-    CATCH(request_prepare(curl, method, url, headerlist, &response));
+    err = headerlist == NULL ? ERROR_REQUEST_HEADERS : 0;
+    CATCH(err);
+    err = request_prepare(curl, method, url, headerlist, &response);
+    CATCH(err);
 
     LOG_DEBUG("Adding form data");
     for (size_t i = 0; i < data_count; i++)
@@ -199,7 +210,8 @@ struct RequestResult request_multipart(
 
     LOG_DEBUG("Cleaning up");
     curl_multi_cleanup(multi_handle);
-    CATCH(request_cleanup(curl));
+    err = request_cleanup(curl);
+    CATCH(err);
     curl_mime_free(form);
     curl_slist_free_all(headerlist);
 

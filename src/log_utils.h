@@ -33,6 +33,6 @@
 #define LOG_WARNING(...)
 #endif
 
-#define LOG_ERROR(...) if (LOG_LEVEL <= LOG_LEVEL_ERROR) { printf("[err] "); LOG(__VA_ARGS__); }
+#define LOG_ERROR(...) if (LOG_LEVEL <= LOG_LEVEL_ERROR) { printf("[err][%s][%s][%d] ", __FILE__, __FUNCTION__, __LINE__); LOG(__VA_ARGS__); }
 
 #endif
