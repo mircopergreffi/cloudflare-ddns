@@ -37,8 +37,8 @@ int main(int argc, char** argv)
 
         char *bind = replace_bind(params.bind_template, ip, params.domain);
         char *bind_noproxy = replace_bind(params.bind_template_noproxy, ip, params.domain);
-        LOG_INFO("---- BIND:\n%s\n----", bind);
-        LOG_INFO("---- BIND_NOPROXY:\n%s\n----", bind_noproxy);
+        LOG_INFO("---- BIND:%s%s%s----", NEWLINE, bind, NEWLINE);
+        LOG_INFO("---- BIND_NOPROXY:%s%s%s----", NEWLINE, bind_noproxy, NEWLINE);
 
         if (strcmp(ip, previousIp) != 0)
         {
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
             snprintf(url, 256, "https://api.cloudflare.com/client/v4/zones/%s/dns_records", params.zone_id);
             struct RequestResult rr = cloudflare_request(cloudflare, "GET", url);
             struct Response mem = rr.response;
-            // printf(">>%s<<\n", mem.memory);
+            
             TRY(sub_handle_zones(params, cloudflare, mem));
             request_result_cleanup(&rr);
 

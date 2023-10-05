@@ -1,12 +1,18 @@
 #ifndef LOG_UTILS_H
 #define LOG_UTILS_H
 
+#ifdef _WIN32
+#define NEWLINE "\r\n"
+#else
+#define NEWLINE "\n"
+#endif
+
 #define LOG_LEVEL_DEBUG 0
 #define LOG_LEVEL_INFO 1
 #define LOG_LEVEL_WARNING 2
 #define LOG_LEVEL_ERROR 3
 
-#define LOG(...) printf(__VA_ARGS__); printf("\n");
+#define LOG(...) printf(__VA_ARGS__); printf(NEWLINE);
 
 #ifndef LOG_LEVEL
 #define LOG_LEVEL LOG_LEVEL_INFO
