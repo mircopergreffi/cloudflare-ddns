@@ -1,2 +1,8 @@
-
+env
 .env
+.vscode
+*.o
+*.od
+src/build
+src/debug
+src/tmp.txt
