@@ -22,7 +22,7 @@ extern CloudFlare cloudflare_init(char *token);
 extern void cloudflare_cleanup(const CloudFlare cloudflare);
 
 // Cloudflare API request
-extern Response cloudflare_request(const CloudFlare cloudflare, const char *method, const char *url);
+extern struct RequestResult cloudflare_request(const CloudFlare cloudflare, const char *method, const char *url);
 
 extern void cloudflare_import(const CloudFlare cloudflare, const char* zone_id, const char* bind, const char* proxied);
 
