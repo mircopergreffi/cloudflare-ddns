@@ -66,7 +66,7 @@ Replace `YOUR_TOKEN` with the previously generated token.
 | DOMAIN                | Your domain name | `example.com` |
 | BIND_TEMPLATE         |  | `%domain%. 1 IN A %ip%` |
 | BIND_TEMPLATE_NOPROXY |  |  |
-| HEALTHCHECK_URL       | Http address to send a heartbeat signal | `https://hc-ping.com/<uuid>` |
+| HEALTHCHECK_URL       | Http address to send a heartbeat signal. A GET request to this address is made everytime an IP check is made. | `https://hc-ping.com/<uuid>` |
 
 `BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY` are used to generate `Zone files` (see: https://en.wikipedia.org/wiki/Zone_file).  
 The DNS records generated from `BIND_TEMPLATE` are proxied from Cloudflare.  
