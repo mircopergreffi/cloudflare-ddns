@@ -11,6 +11,7 @@ struct Parameters
     char *bind_template;
     char *bind_template_noproxy;
     int skip_cname;
+    char *healthcheck_url;
 };
 
 extern char * get_env(const char *name);
