@@ -140,3 +140,19 @@ int sub_handle_zones(const struct Parameters params, const CloudFlare cloudflare
     TRACE_END();
     return NO_ERROR;
 }
+
+int health_check(char *url)
+{
+    int err = NO_ERROR;
+    TRACE_START();
+    if (strlen(url) > 0) {
+        LOG_INFO("Health check")
+        struct RequestResult result = request("GET", url, NULL, 0);
+        err = result.error_code;
+        request_result_cleanup(&result);
+    } else {
+        LOG_INFO("Health check url not set, skipping");
+    }
+    TRACE_END();
+    return err;
+}

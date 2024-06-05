@@ -107,6 +107,7 @@ struct Parameters get_parameters()
     parameters.bind_template = get_env_and_print("BIND_TEMPLATE");
     parameters.bind_template_noproxy = get_env_and_print("BIND_TEMPLATE_NOPROXY");
     parameters.skip_cname = atoi(get_env_and_print("SKIP_CNAME"));
+    parameters.healthcheck_url = get_env_and_print("HEALTHCHECK_URL");
     TRACE_END();
     return parameters;
 }

@@ -69,6 +69,8 @@ int main(int argc, char** argv)
 
             LOG_INFO("Updating previous IP");
             strcpy(previousIp, ip);
+
+            health_check(params.healthcheck_url);
         }
     } while (params.update_interval > 0);
     // Cleanup global curl
