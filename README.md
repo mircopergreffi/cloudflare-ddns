@@ -61,11 +61,12 @@ Replace `YOUR_TOKEN` with the previously generated token.
 |-----------------------|-------------|---------|
 | TOKEN                 | Cloudflare API Token | |
 | ZONEID                | Cloudflare Zone ID | |
-| UPDATE_INTERVAL       | Time to wait between IP checks in seconds. `-1` for updating DNS records once. | 30 |
+| UPDATE_INTERVAL       | Time to wait between IP checks in seconds. `-1` for updating DNS records once. | `30` |
 | SKIP_CNAME            | Wheter to skip CNAME records. Set to `1` for skipping, `0` for deleting them. | `1` |
 | DOMAIN                | Your domain name | `example.com` |
 | BIND_TEMPLATE         |  | `%domain%. 1 IN A %ip%` |
 | BIND_TEMPLATE_NOPROXY |  |  |
+| HEALTHCHECK_URL       | Http address to send a heartbeat signal | `https://hc-ping.com/<uuid>` |
 
 `BIND_TEMPLATE` and `BIND_TEMPLATE_NOPROXY` are used to generate `Zone files` (see: https://en.wikipedia.org/wiki/Zone_file).  
 The DNS records generated from `BIND_TEMPLATE` are proxied from Cloudflare.  
