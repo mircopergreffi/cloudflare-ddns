@@ -22,4 +22,4 @@ jobs:
           VERSION=${{github.event.release.tag_name}}
           VERSION=${VERSION:1}
           docker buildx create --name container --driver docker-container
-          docker buildx build --tag mircopergreffi/cloudflare-ddns:${VERSION} --platform linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/386 --builder container --push .
+          docker buildx build --tag mircopergreffi/cloudflare-ddns:${VERSION} --platform linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/386,linux/ppc64le,linux/s390x --builder container --push .
