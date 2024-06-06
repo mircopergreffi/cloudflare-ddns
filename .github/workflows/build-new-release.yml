@@ -21,6 +21,6 @@ jobs:
       - name: Extract version tag
         run: VERSION=${{ github.event.release.tag_name }} && VERSION=${VERSION:1}
       - name: Build
-        run: docker buildx build --platform linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64/v8,linux/386,linux/mips64le,linux/ppc64le,linux/s390x -t mircopergreffi/cloudflare-ddns:${VERSION}
+        run: docker buildx build --platform linux/arm/v7 -t mircopergreffi/cloudflare-ddns:${VERSION}
       - name: Push
         run: docker image push --all-tags mircopergreffi/cloudflare-ddns
