@@ -5,7 +5,7 @@ It allows you to use Cloudflare as a Dynamic DNS.
 
 The container is built from scratch and only contains the statically-linked executable and SSL certficates in order to minimize its footprint.
 
-The goal was minimize resource usage for use on routers/ap, like the Mikrotik hAp ax, that can run containers.
+The goal was minimize resource usage for use on routers/Aps, like the Mikrotik hAp ax, that can run containers.
 
 The compressed image size is **2.4MB**.
 
